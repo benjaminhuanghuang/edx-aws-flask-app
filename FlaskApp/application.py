@@ -73,6 +73,19 @@ def home():
                 'get_object',
                 Params={'Bucket': config.PHOTOS_BUCKET, 'Key': key})
 
+            #######
+            # rekcognition exercise
+            #######
+            rek = boto3.client('rekognition')
+            response = rek.detect_labels(
+                Image={
+                    'S3Object': {
+                        'Bucket': config.PHOTOS_BUCKET,
+                        'Name': key
+                    }
+                })
+            all_labels = [label['Name'] for label in response['Labels']]
+
     return render_template_string("""
             {% extends "main.html" %}
             {% block content %}
